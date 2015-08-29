@@ -16,7 +16,6 @@ struct Client
     gchar *hover_uri;
     GtkWidget *location;
     GtkWidget *progress;
-    GtkWidget *scroll;
     GtkWidget *top_box;
     GtkWidget *vbox;
     GtkWidget *web_view;
@@ -72,9 +71,7 @@ client_new(const gchar *uri)
         g_object_set(G_OBJECT(webkit_web_view_get_settings(WEBKIT_WEB_VIEW(c->web_view))),
                      "user-agent", user_agent, NULL);
 
-    c->scroll = gtk_scrolled_window_new(NULL, NULL);
-    gtk_container_add(GTK_CONTAINER(c->scroll), c->web_view);
-    gtk_container_add(GTK_CONTAINER(c->win), c->scroll);
+    gtk_container_add(GTK_CONTAINER(c->win), c->web_view);
     gtk_widget_show_all(c->win);
 
     f = ensure_uri_scheme(uri);
