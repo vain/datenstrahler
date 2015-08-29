@@ -6,6 +6,12 @@ static const gchar *accepted_language[] = { NULL };
  * after a short delay. */
 static int crash_autoreload_delay = 2;
 
+/* Go fullscreen by default? */
+static gboolean fullscreen = FALSE;
+
+/* Default geometry to use when starting up? */
+static gchar *geometry = "800x600";
+
 /* Standard zoom level. */
 static gdouble global_zoom = 1.0;
 
