@@ -1,0 +1,10 @@
+                             =============
+                             datenstrahler
+                             =============
+
+
+datenstrahler is a stripped down version of lariza[1]. It's meant to
+replace the older, WebKit1-only script wepsyte[2].
+
+[1] https://github.com/vain/lariza
+[2] https://github.com/vain/bin-pub/blob/master/wepsyte
