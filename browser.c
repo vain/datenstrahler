@@ -22,13 +22,6 @@ struct Client
     GtkWidget *win;
 };
 
-struct DownloadManager
-{
-    GtkWidget *scroll;
-    GtkWidget *toolbar;
-    GtkWidget *win;
-} dm;
-
 
 #include "config.h"
 
