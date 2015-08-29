@@ -1,0 +1,81 @@
+.TH datenstrahler 1 "2015-08-29" "datenstrahler" "User Commands"
+.\" --------------------------------------------------------------------
+.SH NAME
+datenstrahler \- display a web site
+.\" --------------------------------------------------------------------
+.SH SYNOPSIS
+\fBdatenstrahler\fP
+[\fB\-c\fP \fIclass\fP]
+[\fB\-f\fP]
+[\fB\-g\fP \fIgeometry\fP]
+[\fB\-i\fP \fIname\fP]
+[\fB\-z\fP \fIzoom\fP]
+\fIuri\fP
+.\" --------------------------------------------------------------------
+.SH DESCRIPTION
+This program displays a web site. It's meant to be used in
+\(lqinformation radiators\(rq or similar applications: You create a
+simple web site that displays some useful information and then you use
+\fBdatenstrahler\fP on a small computer with a large screen to display
+that web site.
+.P
+A few hints:
+.P
+.IP \(bu 4
+If you want to hide scroll bars, you must do this in the CSS code of
+your web site.
+.IP \(bu 4
+If you want to display live data, your web site will most likely need to
+be reloaded periodically. Your web site must do this by itself, using
+common HTML or JavaScript methods. \fBdatenstrahler\fP does not reload
+the web site for you.
+.IP \(bu 4
+You should refrain from using iframes. \fBdatenstrahler\fP will
+automatically reload the web site if there's a loading error (e.g.,
+disconnected from network), but it won't detect these kinds of errors in
+iframes.
+.\" --------------------------------------------------------------------
+.SH OPTIONS
+.TP
+\fB\-c\fP \fIclass\fP, \fB\-i\fP \fIname\fP
+Set the \(lqWM_CLASS\(rq property of the X11 window. Defaults to
+\fBDatenstrahler\fP as class and \fBdatenstrahler\fP as name.
+.TP
+\fB\-f\fP
+Start up in fullscreen mode. Turned off by default.
+.TP
+\fB\-g\fP \fIgeometry\fP
+Apply the X11 geometry string \fIgeometry\fP to the window.
+.TP
+\fB\-z\fP \fIzoom\fP
+Zoom the web page. \fIzoom\fP defaults to \fB1.0\fP.
+.P
+You can customize \fBdatenstrahler\fP further by editing the file
+\fIconfig.h\fP and recompiling the source code.
+.\" --------------------------------------------------------------------
+.SH LICENSE
+\fBdatenstrahler\fP is released as \(lqPIZZA-WARE\(rq. See the
+accompanying \fILICENSE\fP file.
+.\" --------------------------------------------------------------------
+.SH HISTORY
+\fBdatenstrahler\fP was originally written by Peter Hofmann. The project
+was started in August 2015.
+.P
+\fBdatenstrahler\fP is a stripped down version of \fBlariza\fP(1).
+Furthermore, \fBdatenstrahler\fP is meant to replace \fBwepsyte\fP: A
+small Python script which served the same purpose, but which was using
+the old and now deprecated WebKit1 API.
+.P
+For reference:
+.P
+.IP \(bu 4
+.UR https://\:github.com/\:vain/\:lariza
+lariza
+.UE
+.IP \(bu 4
+.UR https://\:github.com/\:vain/\:bin-pub/\:blob/\:master/\:wepsyte
+wepsyte
+.UE
+.\" --------------------------------------------------------------------
+.SH "SEE ALSO"
+.BR lariza (1).
