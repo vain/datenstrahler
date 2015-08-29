@@ -2,9 +2,10 @@
  * means use WebKit's default value. */
 static const gchar *accepted_language[] = { NULL };
 
-/* If WebKit's rendering process crashes, the website will be reloaded
- * after a short delay. */
-static int crash_autoreload_delay = 2;
+/* If WebKit's rendering process crashes or loading of a web site
+ * failed, a reload will be triggered after a short delay.
+ * Note: This does not apply to iframes which failed to load. */
+static int autoreload_delay = 2;
 
 /* Go fullscreen by default? */
 static gboolean fullscreen = FALSE;

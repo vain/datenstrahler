@@ -7,8 +7,10 @@
 static WebKitWebView *client_new(const gchar *);
 static void changed_title(GObject *, GParamSpec *, gpointer);
 static gboolean crashed_web_view(WebKitWebView *, gpointer);
-static gboolean crashed_web_view_reload(gpointer);
+static gboolean load_failed(WebKitWebView *, WebKitLoadEvent, gchar *,
+                            gpointer, gpointer);
 static gchar *ensure_uri_scheme(const gchar *);
+static gboolean web_view_reload(gpointer);
 
 
 struct Client
@@ -55,6 +57,8 @@ client_new(const gchar *uri)
     g_signal_connect(G_OBJECT(c->win), "destroy", G_CALLBACK(gtk_main_quit), c);
     g_signal_connect(G_OBJECT(c->web_view), "notify::title",
                      G_CALLBACK(changed_title), c);
+    g_signal_connect(G_OBJECT(c->web_view), "load-failed",
+                     G_CALLBACK(load_failed), c);
     g_signal_connect(G_OBJECT(c->web_view), "close",
                      G_CALLBACK(gtk_main_quit), c);
     g_signal_connect(G_OBJECT(c->web_view), "web-process-crashed",
@@ -102,23 +106,29 @@ gboolean
 crashed_web_view(WebKitWebView *web_view, gpointer data)
 {
     fprintf(stderr, __NAME__": WebView crashed!\n");
-    if (crash_autoreload_delay >= 1)
+    if (autoreload_delay >= 1)
     {
         fprintf(stderr, __NAME__": Reloading WebView in %d seconds.\n",
-                crash_autoreload_delay);
-        g_timeout_add_seconds(crash_autoreload_delay, crashed_web_view_reload,
-                              web_view);
+                autoreload_delay);
+        g_timeout_add_seconds(autoreload_delay, web_view_reload, web_view);
     }
 
     return TRUE;
 }
 
 gboolean
-crashed_web_view_reload(gpointer data)
+load_failed(WebKitWebView *web_view, WebKitLoadEvent load_event,
+            gchar *failing_uri, gpointer error, gpointer data)
 {
-    webkit_web_view_reload_bypass_cache(WEBKIT_WEB_VIEW(data));
+    fprintf(stderr, __NAME__": Loading %s failed\n", failing_uri);
+    if (autoreload_delay >= 1)
+    {
+        fprintf(stderr, __NAME__": Reloading WebView in %d seconds.\n",
+                autoreload_delay);
+        g_timeout_add_seconds(autoreload_delay, web_view_reload, web_view);
+    }
 
-    return G_SOURCE_REMOVE;
+    return FALSE;
 }
 
 gchar *
@@ -139,6 +149,15 @@ ensure_uri_scheme(const gchar *t)
     else
         return g_strdup(t);
 }
+
+gboolean
+web_view_reload(gpointer data)
+{
+    webkit_web_view_reload_bypass_cache(WEBKIT_WEB_VIEW(data));
+
+    return G_SOURCE_REMOVE;
+}
+
 
 int
 main(int argc, char **argv)
