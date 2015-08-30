@@ -1,69 +1,40 @@
-datenstrahler(1)                     User Commands                    datenstrahler(1)
+                             =============
+                             datenstrahler
+                             =============
 
 
-
-NAME
-       datenstrahler - display a web site
-
-SYNOPSIS
-       datenstrahler [-c class] [-f] [-g geometry] [-i name] [-z zoom] uri
-
-DESCRIPTION
-       This  program displays a web site. It's meant to be used in “information radia‐
-       tors” or similar applications: You create a simple web site that displays  some
-       useful  information  and  then you use datenstrahler on a small computer with a
-       large screen to display that web site.
-
-       A few hints:
-
-       ·   If you want to hide scroll bars, you must do this in the CSS code  of  your
-           web site.
-
-       ·   If you want to display live data, your web site will most likely need to be
-           reloaded periodically. Your web site must do this by itself,  using  common
-           HTML  or JavaScript methods. datenstrahler does not reload the web site for
-           you.
-
-       ·   You should refrain from using  iframes.  datenstrahler  will  automatically
-           reload  the  web  site  if there's a loading error (e.g., disconnected from
-           network), but it won't detect these kinds of errors in iframes.
-
-OPTIONS
-       -c class, -i name
-              Set the “WM_CLASS” property of the X11 window. Defaults to Datenstrahler
-              as class and datenstrahler as name.
-
-       -f     Start up in fullscreen mode. Turned off by default.
-
-       -g geometry
-              Apply the X11 geometry string geometry to the window.
-
-       -z zoom
-              Zoom the web page. zoom defaults to 1.0.
-
-       You can customize datenstrahler further by editing the file config.h and recom‐
-       piling the source code.
-
-LICENSE
-       datenstrahler is released as “PIZZA-WARE”. See the accompanying LICENSE file.
-
-HISTORY
-       datenstrahler was originally written by Peter Hofmann. The project was  started
-       in August 2015.
-
-       datenstrahler  is  a  stripped  down version of lariza(1).  Furthermore, daten‐
-       strahler is meant to replace wepsyte: A small Python script  which  served  the
-       same purpose, but which was using the old and now deprecated WebKit1 API.
-
-       For reference:
-
-       ·   lariza ⟨https://github.com/vain/lariza⟩
-
-       ·   wepsyte ⟨https://github.com/vain/bin-pub/blob/master/wepsyte⟩
-
-SEE ALSO
-       lariza(1).
+This program displays a web site. It's meant to be used in "information
+radiators" or similar applications: You create a simple web site that
+displays some useful information and then you use datenstrahler on a
+small computer with a large screen to display that web site.
 
 
+Installation
+------------
 
-datenstrahler                         2015-08-29                      datenstrahler(1)
+The following C libraries are required:
+
+    - GLib
+    - GTK+ 3
+    - WebKit2GTK+
+
+datenstrahler expects to be run on a POSIX-ish operating system.
+
+You can customize the program by creating your own config.h based on
+config.def.h. In any case, config.h must exist in order to build the
+program.
+
+To build the program and install it to /usr/local:
+
+    $ make
+    # make install
+
+
+Running
+-------
+
+You usually run the program from a script or terminal:
+
+    $ datenstrahler http://my.website.example.com
+
+Refer to the manpage for all options.
