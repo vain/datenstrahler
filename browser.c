@@ -15,11 +15,6 @@ static gboolean web_view_reload(gpointer);
 
 struct Client
 {
-    gchar *hover_uri;
-    GtkWidget *location;
-    GtkWidget *progress;
-    GtkWidget *top_box;
-    GtkWidget *vbox;
     GtkWidget *web_view;
     GtkWidget *win;
 };
