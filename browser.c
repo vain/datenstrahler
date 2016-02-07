@@ -84,6 +84,9 @@ client_new(const gchar *uri)
     webkit_web_view_load_uri(WEBKIT_WEB_VIEW(c->web_view), f);
     g_free(f);
 
+    if (reload_interval > 0)
+        g_timeout_add_seconds(reload_interval, web_view_reload, c->web_view);
+
     return WEBKIT_WEB_VIEW(c->web_view);
 }
 
@@ -101,7 +104,7 @@ gboolean
 crashed_web_view(WebKitWebView *web_view, gpointer data)
 {
     fprintf(stderr, __NAME__": WebView crashed!\n");
-    if (autoreload_delay >= 1)
+    if (autoreload_delay >= 1 && reload_interval <= 0)
     {
         fprintf(stderr, __NAME__": Reloading WebView in %d seconds.\n",
                 autoreload_delay);
@@ -116,7 +119,7 @@ load_failed(WebKitWebView *web_view, WebKitLoadEvent load_event,
             gchar *failing_uri, gpointer error, gpointer data)
 {
     fprintf(stderr, __NAME__": Loading %s failed\n", failing_uri);
-    if (autoreload_delay >= 1)
+    if (autoreload_delay >= 1 && reload_interval <= 0)
     {
         fprintf(stderr, __NAME__": Reloading WebView in %d seconds.\n",
                 autoreload_delay);
@@ -150,7 +153,10 @@ web_view_reload(gpointer data)
 {
     webkit_web_view_reload_bypass_cache(WEBKIT_WEB_VIEW(data));
 
-    return G_SOURCE_REMOVE;
+    if (reload_interval > 0)
+        return G_SOURCE_CONTINUE;
+    else
+        return G_SOURCE_REMOVE;
 }
 
 
@@ -161,7 +167,7 @@ main(int argc, char **argv)
 
     gtk_init(&argc, &argv);
 
-    while ((opt = getopt(argc, argv, "c:fg:i:z:")) != -1)
+    while ((opt = getopt(argc, argv, "c:fg:i:r:z:")) != -1)
     {
         switch (opt)
         {
@@ -176,6 +182,9 @@ main(int argc, char **argv)
                 break;
             case 'i':
                 window_name = g_strdup(optarg);
+                break;
+            case 'r':
+                reload_interval = atoi(optarg);
                 break;
             case 'z':
                 global_zoom = atof(optarg);

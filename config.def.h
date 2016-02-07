@@ -16,5 +16,8 @@ static gchar *geometry = "800x600";
 /* Standard zoom level. */
 static gdouble global_zoom = 1.0;
 
+/* Automatically reload the URL after this many seconds. Disabled if 0. */
+static int reload_interval = 0;
+
 /* NULL means use WebKit's default value. */
 static gchar *user_agent = NULL;

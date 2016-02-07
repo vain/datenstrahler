@@ -1,4 +1,4 @@
-.TH datenstrahler 1 "2015-08-29" "datenstrahler" "User Commands"
+.TH datenstrahler 1 "2016-02-07" "datenstrahler" "User Commands"
 .\" --------------------------------------------------------------------
 .SH NAME
 datenstrahler \- display a web site
@@ -9,6 +9,7 @@ datenstrahler \- display a web site
 [\fB\-f\fP]
 [\fB\-g\fP \fIgeometry\fP]
 [\fB\-i\fP \fIname\fP]
+[\fB\-r\fP \fIreload_interval\fP]
 [\fB\-z\fP \fIzoom\fP]
 \fIuri\fP
 .\" --------------------------------------------------------------------
@@ -46,6 +47,12 @@ Start up in fullscreen mode. Turned off by default.
 .TP
 \fB\-g\fP \fIgeometry\fP
 Apply the X11 geometry string \fIgeometry\fP to the window.
+.TP
+\fB\-r\fP \fIreload_interval\fP
+Automatically reload the URL after this many seconds. Defaults to
+\fB0\fP which means \(lqdisabled\(rq. Note that automatic reloading on
+page load failures and WebView crashes will be disabled if \fB\-r\fP is
+given.
 .TP
 \fB\-z\fP \fIzoom\fP
 Zoom the web page. \fIzoom\fP defaults to \fB1.0\fP.
