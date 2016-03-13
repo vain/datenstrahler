@@ -1,0 +1,11 @@
+Release history for datenstrahler
+
+next
+  [Added]
+  - Parameter "-r" can trigger an automatic reload after $n seconds.
+
+v15.09  2015-09-01
+  [Added]
+  - Initial release.
+  - Show a web page in a window.
+  - Manpage.
