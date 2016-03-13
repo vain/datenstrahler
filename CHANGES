@@ -1,6 +1,6 @@
 Release history for datenstrahler
 
-next
+v16.03  2016-03-13
   [Added]
   - Parameter "-r" can trigger an automatic reload after $n seconds.
 
