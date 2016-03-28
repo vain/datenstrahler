@@ -10,6 +10,7 @@ static gboolean crashed_web_view(WebKitWebView *, gpointer);
 static gboolean load_failed(WebKitWebView *, WebKitLoadEvent, gchar *,
                             gpointer, gpointer);
 static gchar *ensure_uri_scheme(const gchar *);
+static gboolean map_event(GtkWidget *, GdkEvent *, gpointer);
 static gboolean web_view_reload(gpointer);
 
 
@@ -41,7 +42,9 @@ client_new(const gchar *uri)
         exit(EXIT_FAILURE);
     }
 
-    c->win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    c->win = gtk_window_new(pseudo_desktop_window ?
+                            GTK_WINDOW_POPUP :
+                            GTK_WINDOW_TOPLEVEL);
     gtk_window_set_wmclass(GTK_WINDOW(c->win), window_name, window_class);
     gtk_window_set_title(GTK_WINDOW(c->win), __NAME__);
 
@@ -79,6 +82,12 @@ client_new(const gchar *uri)
      * follows the example here:
      * https://developer.gnome.org/gtk3/stable/GtkWindow.html#gtk-window-parse-geometry */
     gtk_widget_show_all(c->win);
+
+    /* A pseudo desktop window is to be lowered in the stack. We can't
+     * do this right away, we have to wait for the window to be actually
+     * mapped. */
+    if (pseudo_desktop_window)
+        g_signal_connect(G_OBJECT(c->win), "map-event", G_CALLBACK(map_event), c);
 
     f = ensure_uri_scheme(uri);
     webkit_web_view_load_uri(WEBKIT_WEB_VIEW(c->web_view), f);
@@ -149,6 +158,17 @@ ensure_uri_scheme(const gchar *t)
 }
 
 gboolean
+map_event(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+    (void)event;
+    (void)data;
+
+    gdk_window_lower(gtk_widget_get_window(widget));
+
+    return FALSE;
+}
+
+gboolean
 web_view_reload(gpointer data)
 {
     webkit_web_view_reload_bypass_cache(WEBKIT_WEB_VIEW(data));
@@ -167,12 +187,15 @@ main(int argc, char **argv)
 
     gtk_init(&argc, &argv);
 
-    while ((opt = getopt(argc, argv, "c:fg:i:r:z:")) != -1)
+    while ((opt = getopt(argc, argv, "c:dfg:i:r:z:")) != -1)
     {
         switch (opt)
         {
             case 'c':
                 window_class = g_strdup(optarg);
+                break;
+            case 'd':
+                pseudo_desktop_window = TRUE;
                 break;
             case 'f':
                 fullscreen = TRUE;

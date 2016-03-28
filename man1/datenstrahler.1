@@ -6,6 +6,7 @@ datenstrahler \- display a web site
 .SH SYNOPSIS
 \fBdatenstrahler\fP
 [\fB\-c\fP \fIclass\fP]
+[\fB\-d\fP]
 [\fB\-f\fP]
 [\fB\-g\fP \fIgeometry\fP]
 [\fB\-i\fP \fIname\fP]
@@ -41,6 +42,11 @@ iframes.
 \fB\-c\fP \fIclass\fP, \fB\-i\fP \fIname\fP
 Set the \(lqWM_CLASS\(rq property of the X11 window. Defaults to
 \fBDatenstrahler\fP as class and \fBdatenstrahler\fP as name.
+.TP
+\fB\-d\fP
+Uses a \(lqpseudo desktop window\(rq. This bypasses the window manager
+and tries to place the window below all other windows. You will very
+likely want to use the \fB\-g\fP option as well.
 .TP
 \fB\-f\fP
 Start up in fullscreen mode. Turned off by default.

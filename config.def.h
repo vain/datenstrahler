@@ -21,3 +21,9 @@ static int reload_interval = 0;
 
 /* NULL means use WebKit's default value. */
 static gchar *user_agent = NULL;
+
+/* Use a "pseudo desktop window"? Internally, this sets the
+ * "override_redirect" flag, causing the window manager to ignore the
+ * X11 window. It also tries to move the window to the bottom of the
+ * stack. */
+static gboolean pseudo_desktop_window = FALSE;
