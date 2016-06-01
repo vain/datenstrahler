@@ -7,6 +7,10 @@ static const gchar *accepted_language[] = { NULL };
  * Note: This does not apply to iframes which failed to load. */
 static int autoreload_delay = 2;
 
+/* Whether to ignore cookies. Note that datenstrahler never stores
+ * cookies on disk anyway. */
+static gboolean dont_accept_cookies = FALSE;
+
 /* Go fullscreen by default? */
 static gboolean fullscreen = FALSE;
 

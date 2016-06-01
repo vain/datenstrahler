@@ -52,6 +52,11 @@ client_new(const gchar *uri)
     wc = webkit_web_view_get_context(WEBKIT_WEB_VIEW(c->web_view));
     webkit_web_view_set_zoom_level(WEBKIT_WEB_VIEW(c->web_view), global_zoom);
 
+    if (dont_accept_cookies)
+        webkit_cookie_manager_set_accept_policy(
+                webkit_web_context_get_cookie_manager(wc),
+                WEBKIT_COOKIE_POLICY_ACCEPT_NEVER);
+
     g_signal_connect(G_OBJECT(c->win), "destroy", G_CALLBACK(gtk_main_quit), c);
     g_signal_connect(G_OBJECT(c->web_view), "notify::title",
                      G_CALLBACK(changed_title), c);
@@ -187,12 +192,15 @@ main(int argc, char **argv)
 
     gtk_init(&argc, &argv);
 
-    while ((opt = getopt(argc, argv, "c:dfg:i:r:z:")) != -1)
+    while ((opt = getopt(argc, argv, "c:Cdfg:i:r:z:")) != -1)
     {
         switch (opt)
         {
             case 'c':
                 window_class = g_strdup(optarg);
+                break;
+            case 'C':
+                dont_accept_cookies = FALSE;
                 break;
             case 'd':
                 pseudo_desktop_window = TRUE;

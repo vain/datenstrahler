@@ -6,6 +6,7 @@ datenstrahler \- display a web site
 .SH SYNOPSIS
 \fBdatenstrahler\fP
 [\fB\-c\fP \fIclass\fP]
+[\fB\-C\fP]
 [\fB\-d\fP]
 [\fB\-f\fP]
 [\fB\-g\fP \fIgeometry\fP]
@@ -37,6 +38,12 @@ iframes.
 \fB\-c\fP \fIclass\fP, \fB\-i\fP \fIname\fP
 Set the \(lqWM_CLASS\(rq property of the X11 window. Defaults to
 \fBDatenstrahler\fP as class and \fBdatenstrahler\fP as name.
+.TP
+\fB\-C\fP
+Do not accept cookies. Note that \fBdatenstrahler\fP never stores
+cookies on disk anyway. This setting merely controls the cookie
+acceptance policy of the running session. Defaults to WebKit's default
+(most likely \(lqaccept all cookies\(rq).
 .TP
 \fB\-d\fP
 Uses a \(lqpseudo desktop window\(rq. This bypasses the window manager
