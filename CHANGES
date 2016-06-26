@@ -1,9 +1,10 @@
 Release history for datenstrahler
 
-next
+v16.06  2016-06-26
   [Added]
   - Parameter "-d" to bypass the window manager, a.k.a "pseudo desktop
     window".
+  - Parameter "-C" to ignore any cookies.
 
 v16.03  2016-03-13
   [Added]
