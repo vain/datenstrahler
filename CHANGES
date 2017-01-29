@@ -1,5 +1,10 @@
 Release history for datenstrahler
 
+next
+  [Added]
+  - Datenstrahler will now automatically add a "file://" prefix for
+    local files.
+
 v16.06  2016-06-26
   [Added]
   - Parameter "-d" to bypass the window manager, a.k.a "pseudo desktop

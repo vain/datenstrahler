@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
@@ -146,7 +147,7 @@ load_failed(WebKitWebView *web_view, WebKitLoadEvent load_event,
 gchar *
 ensure_uri_scheme(const gchar *t)
 {
-    gchar *f;
+    gchar *f, *fabs;
 
     f = g_ascii_strdown(t, -1);
     if (!g_str_has_prefix(f, "http:") &&
@@ -155,7 +156,14 @@ ensure_uri_scheme(const gchar *t)
         !g_str_has_prefix(f, "about:"))
     {
         g_free(f);
-        f = g_strdup_printf("http://%s", t);
+        fabs = realpath(t, NULL);
+        if (fabs != NULL)
+        {
+            f = g_strdup_printf("file://%s", fabs);
+            free(fabs);
+        }
+        else
+            f = g_strdup_printf("http://%s", t);
         return f;
     }
     else
