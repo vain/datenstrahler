@@ -1,6 +1,6 @@
 Release history for datenstrahler
 
-next
+v17.02  2017-02-12
   [Added]
   - Datenstrahler will now automatically add a "file://" prefix for
     local files.
