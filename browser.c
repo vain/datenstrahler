@@ -17,6 +17,7 @@ static gboolean web_view_reload(gpointer);
 
 struct Client
 {
+    gchar *uri;
     GtkWidget *web_view;
     GtkWidget *win;
 };
@@ -43,6 +44,7 @@ client_new(const gchar *uri)
         exit(EXIT_FAILURE);
     }
 
+    c->uri = g_strdup(uri);
     c->win = gtk_window_new(pseudo_desktop_window ?
                             GTK_WINDOW_POPUP :
                             GTK_WINDOW_TOPLEVEL);
@@ -95,12 +97,12 @@ client_new(const gchar *uri)
     if (pseudo_desktop_window)
         g_signal_connect(G_OBJECT(c->win), "map-event", G_CALLBACK(map_event), c);
 
-    f = ensure_uri_scheme(uri);
+    f = ensure_uri_scheme(c->uri);
     webkit_web_view_load_uri(WEBKIT_WEB_VIEW(c->web_view), f);
     g_free(f);
 
     if (reload_interval > 0)
-        g_timeout_add_seconds(reload_interval, web_view_reload, c->web_view);
+        g_timeout_add_seconds(reload_interval, web_view_reload, c);
 
     return WEBKIT_WEB_VIEW(c->web_view);
 }
@@ -123,7 +125,7 @@ crashed_web_view(WebKitWebView *web_view, gpointer data)
     {
         fprintf(stderr, __NAME__": Reloading WebView in %d seconds.\n",
                 autoreload_delay);
-        g_timeout_add_seconds(autoreload_delay, web_view_reload, web_view);
+        g_timeout_add_seconds(autoreload_delay, web_view_reload, data);
     }
 
     return TRUE;
@@ -138,7 +140,7 @@ load_failed(WebKitWebView *web_view, WebKitLoadEvent load_event,
     {
         fprintf(stderr, __NAME__": Reloading WebView in %d seconds.\n",
                 autoreload_delay);
-        g_timeout_add_seconds(autoreload_delay, web_view_reload, web_view);
+        g_timeout_add_seconds(autoreload_delay, web_view_reload, data);
     }
 
     return FALSE;
@@ -184,7 +186,17 @@ map_event(GtkWidget *widget, GdkEvent *event, gpointer data)
 gboolean
 web_view_reload(gpointer data)
 {
-    webkit_web_view_reload_bypass_cache(WEBKIT_WEB_VIEW(data));
+    struct Client *c = (struct Client *)data;
+    gchar *f;
+
+    /* Don't use "webkit_web_view_reload*" here because it might get
+     * stuck or take a very long time on network failures. Starting a
+     * new load operation is much more responsive. */
+
+    webkit_web_view_stop_loading(WEBKIT_WEB_VIEW(c->web_view));
+    f = ensure_uri_scheme(c->uri);
+    webkit_web_view_load_uri(WEBKIT_WEB_VIEW(c->web_view), f);
+    g_free(f);
 
     if (reload_interval > 0)
         return G_SOURCE_CONTINUE;
