@@ -1,6 +1,11 @@
 Release history for datenstrahler
 
 next
+  [LICENSING]
+  - The project has been relicensed under the MIT license (more
+    precisely called "Expat License", but everyone calls it "MIT
+    license" these days).
+
   [Fixed]
   - "-r" works better on network failures.
 
